@@ -75,7 +75,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     public Category create(Category category) {
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO category(category_id, name, description)
+                    INSERT INTO categories(category_id, name, description)
                     VALUES(?, ?, ?);
                     """);
             statement.setInt(1, category.getCategoryId());
@@ -87,7 +87,7 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return category;
     }
 
     @Override
