@@ -1,5 +1,6 @@
 package org.yearup.controllers;
 
+import com.mysql.cj.protocol.x.XProtocolRow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.SpringCglibInfo;
 import org.springframework.http.HttpStatus;
@@ -57,16 +58,15 @@ public class ShoppingCartController
 
     // add a POST method to add a product to the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be added
-    @PostMapping("/products/{id}")
-    public ShoppingCart addItemToCart(Principal principal, @PathVariable int id){
+    @PostMapping("/products/{productId}")
+    public ShoppingCart addItemToCart(Principal principal, @PathVariable int productId){
         //gets logged in user
         String userName = principal.getName();
         //finds user in DB
         User user = userDao.getByUserName(userName);
         int userId = user.getId();
 
-        return shoppingCartDao.addToShoppingCart(userId, productDao.getById(id));
-
+        return shoppingCartDao.addToShoppingCart(userId, productDao.getById(productId));
     }
 
 
@@ -74,6 +74,15 @@ public class ShoppingCartController
     // add a PUT method to update an existing product in the cart - the url should be
     // https://localhost:8080/cart/products/15 (15 is the productId to be updated)
     // the BODY should be a ShoppingCartItem - quantity is the only value that will be updated
+    @PutMapping("/products/{productId}")
+    public void updateCart(Principal principal, @RequestBody ShoppingCartItem item, @PathVariable int productId){
+        String userName = principal.getName();
+        User user = userDao.getByUserName(userName);
+        int userId = user.getId();
+
+        shoppingCartDao.updateCart(userId, item, productId);
+    }
+
 
 
     // add a DELETE method to clear all products from the current users cart

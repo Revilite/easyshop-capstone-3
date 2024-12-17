@@ -8,7 +8,6 @@ import org.yearup.models.ShoppingCart;
 import org.yearup.models.ShoppingCartItem;
 
 import javax.sql.DataSource;
-import java.beans.PropertyEditorSupport;
 import java.sql.*;
 
 @Component
@@ -45,6 +44,8 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
                         rs.getBoolean("featured"),
                         rs.getString("image_url"));
                 item.setProduct(product);
+                item.setQuantity(rs.getInt("quantity"));
+
                 cart.add(item);
             }
             return cart;
@@ -72,6 +73,25 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             return cart;
 
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void updateCart(int userId,  ShoppingCartItem item, int productId) {
+        try(Connection connection = getConnection()){
+            PreparedStatement statement = connection.prepareStatement("""
+                    UPDATE shopping_cart
+                    SET quantity = ?
+                    WHERE user_id = ? AND product_id = ?;
+                    """);
+
+            statement.setInt(1, item.getQuantity());
+            statement.setInt(2, userId);
+            statement.setInt(3, productId);
+
+            statement.executeUpdate();
+        }catch (SQLException e){
             throw new RuntimeException(e);
         }
     }
