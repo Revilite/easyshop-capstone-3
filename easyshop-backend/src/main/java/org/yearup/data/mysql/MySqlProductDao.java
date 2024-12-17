@@ -137,28 +137,31 @@ public class MySqlProductDao extends MySqlDaoBase implements ProductDao {
 
     @Override
     public void update(int productId, Product product) {
-        String sql = "UPDATE products" +
-                " SET name = ? " +
-                "   , price = ? " +
-                "   , category_id = ? " +
-                "   , description = ? " +
-                "   , color = ? " +
-                "   , image_url = ? " +
-                "   , stock = ? " +
-                "   , featured = ? " +
-                " WHERE product_id = ?;";
+        String sql = """
+                UPDATE products
+                SET name = ?,
+                price = ?,
+                category_id = ?,
+                description = ?,
+                color = ?,
+                image_url = ?,
+                stock = ?,
+                featured = ?
+                WHERE product_id = ?;
+                """;
 
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, product.getName());
-            statement.setBigDecimal(2, product.getPrice());
-            statement.setInt(3, product.getCategoryId());
-            statement.setString(4, product.getDescription());
-            statement.setString(5, product.getColor());
-            statement.setString(6, product.getImageUrl());
-            statement.setInt(7, product.getStock());
-            statement.setBoolean(8, product.isFeatured());
-            statement.setInt(9, productId);
+            statement.setInt(1, product.getProductId());
+            statement.setString(2, product.getName());
+            statement.setBigDecimal(3, product.getPrice());
+            statement.setInt(4, product.getCategoryId());
+            statement.setString(5, product.getDescription());
+            statement.setString(6, product.getColor());
+            statement.setString(7, product.getImageUrl());
+            statement.setInt(8, product.getStock());
+            statement.setBoolean(9, product.isFeatured());
+            statement.setInt(10, product.getProductId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
