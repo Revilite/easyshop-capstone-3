@@ -75,19 +75,24 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
     public Category create(Category category) {
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("""
-                    INSERT INTO categories(category_id, name, description)
-                    VALUES(?, ?, ?);
-                    """);
-            statement.setInt(1, category.getCategoryId());
-            statement.setString(2, category.getName());
-            statement.setString(3, category.getDescription());
-
+                    INSERT INTO categories(name, description)
+                    VALUES( ?, ?);
+                    """, PreparedStatement.RETURN_GENERATED_KEYS);
+            statement.setString(1, category.getName());
+            statement.setString(2, category.getDescription());
             statement.executeUpdate();
+
+            ResultSet rs = statement.getGeneratedKeys();
+
+            if (rs.next()) {
+                int returnedRows = rs.getInt(1);
+                return new Category(returnedRows, category.getName(), category.getDescription());
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return category;
+        return null;
     }
 
     @Override
@@ -110,17 +115,15 @@ public class MySqlCategoryDao extends MySqlDaoBase implements CategoryDao {
         }
     }
 
-    public int delete(int categoryId) {
+    @Override
+    public void delete(int categoryId) {
         try (Connection connection = getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("""
-                    DELETE products
-                    FROM categories, products
-                    WHERE categories.category_id = ?;
+            PreparedStatement deleteCategory = connection.prepareStatement("""
+                    DELETE FROM categories 
+                    WHERE category_id = ?;
                     """);
-            statement.setInt(1, categoryId);
+            deleteCategory.setInt(1, categoryId);
 
-
-           return statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

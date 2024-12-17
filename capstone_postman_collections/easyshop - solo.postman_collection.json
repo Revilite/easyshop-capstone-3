@@ -1,9 +1,10 @@
 {
 	"info": {
-		"_postman_id": "471c6332-3a4e-4a54-8c1a-ca1cfef80d98",
+		"_postman_id": "8b881f77-c028-4675-91d4-136bbfc9e5b1",
 		"name": "easyshop - solo",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1479778"
+		"_exporter_id": "38287978",
+		"_collection_link": "https://capstone-java-backend.postman.co/workspace/Capstone~785b333a-cf89-4b2d-a9c7-087cc661ac19/collection/38287978-8b881f77-c028-4675-91d4-136bbfc9e5b1?action=share&source=collection_link&creator=38287978"
 	},
 	"item": [
 		{
@@ -55,17 +56,18 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"userToken\", pm.response.json().token);\r",
+							"pm.collectionVariables.set(\"userToken\", pm.response.json().token);\r",
 							"\r",
 							"pm.test(\"User Login should create token\", function() {\r",
 							"    pm.response.to.have.status(200);\r",
 							"    pm.response.to.be.ok;\r",
 							"    pm.response.to.be.withBody;\r",
 							"    pm.response.to.have.jsonBody(\"token\");\r",
-							"    pm.expect(pm.environment.get(\"userToken\")).to.not.equal(\"\");\r",
+							"    pm.expect(pm.collectionVariables.get(\"userToken\")).to.not.equal(\"\");\r",
 							"})"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -100,13 +102,14 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"adminToken\", pm.response.json().token)\r",
+							"pm.collectionVariables.set(\"adminToken\", pm.response.json().token)\r",
 							"\r",
 							"pm.test(\"Admin Login should succeed\", function() {\r",
 							"    pm.response.to.have.status(200);\r",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -263,7 +266,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.environment.set(\"newCategoryId\", pm.response.json().categoryId)\r",
+							"pm.collectionVariables.set(\"newCategoryId\", pm.response.json().categoryId)\r",
 							"\r",
 							"var name = pm.response.json().name;\r",
 							"\r",
@@ -272,7 +275,8 @@
 							"    pm.expect(name).to.equal(\"Demo\");\r",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -511,6 +515,43 @@
 							"key": "maxPrice",
 							"value": "90"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Prodcuts",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n        \"name\": \"Fitness Tracker\",\r\n        \"price\": 89.99,\r\n        \"categoryId\": 1,\r\n        \"description\": \"the end is never the end is never the end.\",\r\n        \"color\": \"Charcoal\",\r\n        \"stock\": 30,\r\n        \"imageUrl\": \"fitness-tracker.jpg\",\r\n        \"featured\": true\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/products/13",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"products",
+						"13"
 					]
 				}
 			},

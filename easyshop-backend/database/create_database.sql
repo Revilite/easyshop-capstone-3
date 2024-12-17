@@ -210,8 +210,7 @@ VALUES  ('Cookware Set', 149.99, 3, 'A comprehensive set of high-quality cookwar
 
 -- sample duplicates from "bug"
 INSERT INTO products (name, price, category_id, description, image_url, stock, featured, color)
-VALUES  ('Laptop', 999.99, 1, 'A high-performance laptop for work and entertainment.', 'laptop.jpg', 30, 0, 'Gray'),
-        ('Laptop', 999.99, 1, 'A high-performance gaming laptop.', 'laptop.jpg', 30, 0, 'Gray'),
+VALUES 
         ('Tea Kettle', 29.99, 3, 'Brew a perfect cup of tea with this classic tea kettle.', 'tea-kettle.jpg', 50, 1, 'White');
 
 -- add shopping cart items
