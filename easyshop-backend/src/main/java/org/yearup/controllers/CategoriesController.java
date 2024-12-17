@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.server.ResponseStatusException;
 import org.yearup.data.CategoryDao;
 import org.yearup.data.ProductDao;
 import org.yearup.models.Category;
 import org.yearup.models.Product;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 // add the annotations to make this a REST controller
@@ -42,6 +45,10 @@ public class CategoriesController {
     @GetMapping("/{id}")
     public Category getById(@PathVariable int id) {
         // get the category by id
+        Category category = categoryDao.getById(id);
+        if (category == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         return categoryDao.getById(id);
     }
 
@@ -55,6 +62,7 @@ public class CategoriesController {
 
     // add annotation to call this method for a POST action
     // Look for spring security  add annotation to ensure that only an ADMIN can call this function
+    //Pre authorize from Swing simple security, making sure the user has a admin role
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -77,8 +85,9 @@ public class CategoriesController {
     // add annotation to ensure that only an ADMIN can call this function
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
+//    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable int id) {
         // delete the category by id
-        categoryDao.delete(id);
+        System.out.println(categoryDao.delete(id));
     }
 }
