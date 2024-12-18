@@ -12,8 +12,9 @@ public class Order {
     private String address;
     private String city;
     private String state;
+    private List<OrderLineItem> lineItems;
 
-    public Order(int orderId, int userId, BigDecimal shippingAmount, LocalDateTime date, String address, String city, String state) {
+    public Order(int orderId, int userId, BigDecimal shippingAmount, LocalDateTime date, String address, String city, String state, List<OrderLineItem> lineItems) {
         this.orderId = orderId;
         this.userId = userId;
         this.shippingAmount = shippingAmount;
@@ -21,8 +22,15 @@ public class Order {
         this.address = address;
         this.city = city;
         this.state = state;
+        this.lineItems = lineItems;
+
     }
 
+
+    public Order(int orderId, int userId) {
+        this.orderId = orderId;
+        this.userId = userId;
+    }
     public int getOrderId() {
         return orderId;
     }
