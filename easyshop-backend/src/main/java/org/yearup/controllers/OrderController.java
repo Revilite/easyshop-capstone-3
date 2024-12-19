@@ -1,11 +1,9 @@
 package org.yearup.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.yearup.data.OrderDao;
 import org.yearup.data.ProfileDao;
 import org.yearup.data.ShoppingCartDao;
@@ -33,17 +31,17 @@ public class OrderController {
         this.usersDB = usersDB;
         this.profileDB = profileDB;
     }
-//Needs a order data type with the list of lineItems
+
+    //Needs a order data type with the list of lineItems
     @PostMapping
     public Order checkout(Principal principal) {
         String username = principal.getName();
         int userId = usersDB.getIdByUsername(username);
 
-        Order lineItems = ordersDB.createOrder(cartDB.getByUserId(userId), userId, profileDB.getUserById(userId));
-
+        Order order = ordersDB.createOrder(cartDB.getByUserId(userId), userId, profileDB.getUserById(userId));
         cartDB.clearCart(userId);
 
-        return lineItems;
+        return order;
     }
 
 }

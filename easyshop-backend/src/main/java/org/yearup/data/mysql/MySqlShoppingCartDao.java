@@ -97,7 +97,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
     }
 
     @Override
-    public void clearCart(int userId) {
+    public ShoppingCart clearCart(int userId) {
         try(Connection connection = getConnection()){
             PreparedStatement statement = connection.prepareStatement("""
                     DELETE FROM shopping_cart
@@ -106,6 +106,11 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             statement.setInt(1, userId);
 
             statement.executeUpdate();
+
+            ShoppingCart cart = getByUserId(userId);
+
+
+            return cart;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -31,6 +31,11 @@ public class Order {
         this.orderId = orderId;
         this.userId = userId;
     }
+
+    public List<OrderLineItem> getLineItems() {
+        return lineItems;
+    }
+
     public int getOrderId() {
         return orderId;
     }
