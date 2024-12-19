@@ -20,7 +20,7 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
 
     @Override
     public ShoppingCart getByUserId(int userId) {
-    ShoppingCart cart = new ShoppingCart();
+        ShoppingCart cart = new ShoppingCart();
         try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("""
                     SELECT * FROM shopping_cart
@@ -73,13 +73,18 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             return cart;
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ShoppingCartItem item = cart.getItems().get(product.getProductId());
+            item.setQuantity(item.getQuantity() + 1);
+
+            updateCart(userId, item, product.getProductId());
+            return cart;
         }
+
     }
 
     @Override
-    public void updateCart(int userId,  ShoppingCartItem item, int productId) {
-        try(Connection connection = getConnection()){
+    public void updateCart(int userId, ShoppingCartItem item, int productId) {
+        try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("""
                     UPDATE shopping_cart
                     SET quantity = ?
@@ -91,14 +96,14 @@ public class MySqlShoppingCartDao extends MySqlDaoBase implements ShoppingCartDa
             statement.setInt(3, productId);
 
             statement.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
     public ShoppingCart clearCart(int userId) {
-        try(Connection connection = getConnection()){
+        try (Connection connection = getConnection()) {
             PreparedStatement statement = connection.prepareStatement("""
                     DELETE FROM shopping_cart
                     WHERE user_id = ?;
