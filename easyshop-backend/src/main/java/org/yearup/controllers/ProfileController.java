@@ -10,6 +10,7 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/profile")
+@CrossOrigin
 public class ProfileController {
 
     ProfileDao profileDb;
@@ -20,7 +21,7 @@ public class ProfileController {
         this.profileDb = profileDb;
         this.userDB = userDB;
     }
-
+    //Uses principal to get username to find user
     @GetMapping
     public Profile getUserProfile(Principal principal){
         String username = principal.getName();

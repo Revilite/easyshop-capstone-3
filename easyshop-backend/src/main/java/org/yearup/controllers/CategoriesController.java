@@ -44,6 +44,8 @@ public class CategoriesController {
     public Category getById(@PathVariable int id) {
         // get the category by id
         Category category = categoryDao.getById(id);
+
+        //Throws a 404 response if category is null or empty
         if (category == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }

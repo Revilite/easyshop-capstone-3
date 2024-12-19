@@ -54,8 +54,6 @@ public class MysqlOrderDao extends MySqlDaoBase implements OrderDao {
             List<OrderLineItem> orderItems = createOrderLineItem(cart, order);
 
 
-
-
             //Returns order items to postman
             return new Order(orderId, userId, new BigDecimal(0), now, profile.getAddress(), profile.getCity(), profile.getState(), createOrderLineItem(cart, order));
         } catch (SQLException e) {

@@ -1,0 +1,346 @@
+{
+	"info": {
+		"_postman_id": "fcc72c2f-015f-4aba-8e7a-4f6e0cc51c61",
+		"name": "custom-optional-easyshop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38287978",
+		"_collection_link": "https://capstone-java-backend.postman.co/workspace/Capstone~785b333a-cf89-4b2d-a9c7-087cc661ac19/collection/38287978-fcc72c2f-015f-4aba-8e7a-4f6e0cc51c61?action=share&source=collection_link&creator=38287978"
+	},
+	"item": [
+		{
+			"name": "Register new user if need",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Registration should succeed\", function() {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{newUserName}}\",\r\n  \"password\": \"{{newUserPassword}}\",\r\n  \"confirmPassword\": \"{{newUserPassword}}\",\r\n  \"role\": \"USER\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/register",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login - greg",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.collectionVariables.set(\"userToken\", pm.response.json().token);\r",
+							"\r",
+							"pm.test(\"User Login should create token\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.be.ok;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.have.jsonBody(\"token\");\r",
+							"    pm.expect(pm.collectionVariables.get(\"userToken\")).to.not.equal(\"\");\r",
+							"})"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{newUserName}}\",\r\n  \"password\": \"{{newUserPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add another Product to Cart - with auth Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var items = pm.response.json().items;\r",
+							"var total = pm.response.json().total;\r",
+							"\r",
+							"pm.test(\"Add additional to cart logged in should succeed\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(items).to.not.be.empty;\r",
+							"    pm.expect(total).to.equal(129.99);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cart/products/15",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart",
+						"products",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update product quantity",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"quantity\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cart/products/15",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart",
+						"products",
+						"15"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cart After Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var items = pm.response.json().items;\r",
+							"var total = pm.response.json().total;\r",
+							"\r",
+							"\r",
+							"pm.test(\"Get cart logged in should succeed\", function() {\r",
+							"\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Cart from user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cart after deletion",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{userToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/cart",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cart"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "{{baseUrl}}",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "userToken",
+			"value": ""
+		},
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "newUserName",
+			"value": "gary",
+			"type": "default"
+		},
+		{
+			"key": "newUserPassword",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

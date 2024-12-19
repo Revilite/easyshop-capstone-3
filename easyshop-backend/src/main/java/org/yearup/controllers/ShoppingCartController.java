@@ -1,8 +1,7 @@
 package org.yearup.controllers;
 
-import com.mysql.cj.protocol.x.XProtocolRow;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.SpringCglibInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +19,9 @@ import java.security.Principal;
 // only logged in users should have access to these actions
 @RestController
 @RequestMapping("/cart")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+@CrossOrigin
 public class ShoppingCartController {
-    // a shopping cart requires
     private ShoppingCartDao shoppingCartDao;
     private UserDao userDao;
     private ProductDao productDao;
