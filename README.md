@@ -41,6 +41,15 @@ The problem then becomes making sure that all of the prequesits are fulfilled to
 2. Make sure that the testing DB is completley refreshed
 3. Run postman tests and pray to god they work
 
+## Work flow
+
+To help with the work flow I used the github project board to structure my phases as well as quickly write down any thoughs I had
+or any problems that I ran into. This was my first time using github project board and it was surprisingly very helpful. My main
+use was to write down any issues that I had at the time and making sure that I was really only working on 1 phase at a time.
+
+![image](https://github.com/user-attachments/assets/79e6bfba-6e41-41af-a7a4-e6fe563414ab)
+
+
 
 ## Author
 Jacob Lockhart :)
